@@ -1,5 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 group = 'com.github.alidili'
 
 android {
@@ -44,4 +46,18 @@ dependencies {
     implementation "androidx.camera:camera-view:${cfgs.camerax_view}"
     implementation "androidx.transition:transition:${cfgs.androidx_transition_version}"
     implementation "androidx.camera:camera-lifecycle:${cfgs.camerax_version}"
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.alidili'
+                artifactId = 'pictureselector'
+                version = 'v2.7.3-rc08-02'
+            }
+        }
+    }
 }
