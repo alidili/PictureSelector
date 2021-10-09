@@ -25,6 +25,8 @@ import com.luck.picture.lib.tools.SdkVersionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author：luck
@@ -178,15 +180,27 @@ public class PictureVideoPlayActivity extends PictureBaseActivity implements
         }
     }
 
+    private Timer mTimer;
+
     @Override
     public void onBackPressed() {
-        if (PictureSelectionConfig.windowAnimationStyle != null
-                && PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation != 0) {
-            finish();
-            overridePendingTransition(0, PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation);
-        } else {
-            exit();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
         }
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (PictureSelectionConfig.windowAnimationStyle != null
+                        && PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation != 0) {
+                    finish();
+                    overridePendingTransition(0, PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation);
+                } else {
+                    exit();
+                }
+            }
+        }, 500);
     }
 
     @Override

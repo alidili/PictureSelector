@@ -66,6 +66,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -843,9 +845,21 @@ public class UCropActivity extends AppCompatActivity {
         return this;
     }
 
+    private Timer mTimer;
+
     @Override
     public void onBackPressed() {
-        closeActivity();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                closeActivity();
+            }
+        }, 500);
     }
 
     /**

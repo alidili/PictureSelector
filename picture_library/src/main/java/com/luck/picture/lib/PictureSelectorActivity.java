@@ -78,6 +78,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author：luck
@@ -2317,17 +2319,29 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     }
 
+    private Timer mTimer;
+
     @Override
     public void onBackPressed() {
-        if (SdkVersionUtils.checkedAndroid_Q()) {
-            finishAfterTransition();
-        } else {
-            super.onBackPressed();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
         }
-        if (PictureSelectionConfig.listener != null) {
-            PictureSelectionConfig.listener.onCancel();
-        }
-        exit();
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (SdkVersionUtils.checkedAndroid_Q()) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
+                if (PictureSelectionConfig.listener != null) {
+                    PictureSelectionConfig.listener.onCancel();
+                }
+                exit();
+            }
+        }, 500);
     }
 
     @Override

@@ -18,10 +18,10 @@ import androidx.core.content.ContextCompat;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.PictureSelectionConfig;
-import com.luck.picture.lib.entity.MediaExtraInfo;
-import com.luck.picture.lib.manager.UCropManager;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.entity.MediaExtraInfo;
 import com.luck.picture.lib.immersive.ImmersiveManage;
+import com.luck.picture.lib.manager.UCropManager;
 import com.luck.picture.lib.permissions.PermissionChecker;
 import com.luck.picture.lib.tools.BitmapUtils;
 import com.luck.picture.lib.tools.DateUtils;
@@ -37,6 +37,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author：luck
@@ -198,12 +200,12 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
         media.setCutPath(cutPath);
         String mimeType = PictureMimeType.getImageMimeType(cutPath);
         media.setMimeType(mimeType);
-        media.setCropImageWidth(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH,0));
-        media.setCropImageHeight(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT,0));
-        media.setCropOffsetX(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_X,0));
-        media.setCropOffsetY(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_Y,0));
-        media.setCropResultAspectRatio(data.getFloatExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO,0F));
-        media.setEditorImage(data.getBooleanExtra(UCrop.EXTRA_EDITOR_IMAGE,false));
+        media.setCropImageWidth(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, 0));
+        media.setCropImageHeight(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT, 0));
+        media.setCropOffsetX(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_X, 0));
+        media.setCropOffsetY(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_Y, 0));
+        media.setCropResultAspectRatio(data.getFloatExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, 0F));
+        media.setEditorImage(data.getBooleanExtra(UCrop.EXTRA_EDITOR_IMAGE, false));
         if (PictureMimeType.isContent(media.getPath())) {
             String path = PictureFileUtils.getPath(getContext(), Uri.parse(media.getPath()));
             media.setRealPath(path);
@@ -256,7 +258,7 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
                         if (audioOutUri != null) {
                             InputStream inputStream = PictureContentResolver.getContentResolverOpenInputStream(this, Uri.parse(config.cameraPath));
                             OutputStream outputStream = PictureContentResolver.getContentResolverOpenOutputStream(this, audioOutUri);
-                            PictureFileUtils.writeFileFromIS(inputStream,outputStream);
+                            PictureFileUtils.writeFileFromIS(inputStream, outputStream);
                             config.cameraPath = audioOutUri.toString();
                         }
                     } catch (Exception e) {
@@ -274,7 +276,7 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
                 // content: Processing rules
                 String path = PictureFileUtils.getPath(getContext(), Uri.parse(config.cameraPath));
                 File cameraFile = new File(path);
-                mimeType = PictureMimeType.getImageMimeType(path,config.cameraMimeType);
+                mimeType = PictureMimeType.getImageMimeType(path, config.cameraMimeType);
                 media.setSize(cameraFile.length());
                 media.setFileName(cameraFile.getName());
                 if (PictureMimeType.isHasImage(mimeType)) {
@@ -298,7 +300,7 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
                 media.setAndroidQToPath(mediaPath);
             } else {
                 File cameraFile = new File(config.cameraPath);
-                mimeType = PictureMimeType.getImageMimeType(config.cameraPath,config.cameraMimeType);
+                mimeType = PictureMimeType.getImageMimeType(config.cameraPath, config.cameraMimeType);
                 media.setSize(cameraFile.length());
                 media.setFileName(cameraFile.getName());
                 if (PictureMimeType.isHasImage(mimeType)) {
@@ -408,14 +410,25 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
         }
     }
 
+    private Timer mTimer;
 
     @Override
     public void onBackPressed() {
-        if (SdkVersionUtils.checkedAndroid_Q()) {
-            finishAfterTransition();
-        } else {
-            super.onBackPressed();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
         }
-        exit();
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (SdkVersionUtils.checkedAndroid_Q()) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
+                exit();
+            }
+        }, 500);
     }
 }

@@ -21,41 +21,52 @@
 
         <activity
             android:name=".PictureSelectorActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true" />
         <activity
             android:name=".PictureSelectorWeChatStyleActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true" />
         <activity
             android:name=".PictureSelectorCameraEmptyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true"
             android:theme="@style/Picture.Theme.Translucent" />
         <activity
             android:name=".PictureCustomCameraActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true" />
 
         <activity
             android:name=".PicturePreviewActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true" />
         <activity
             android:name=".PictureSelectorPreviewWeChatStyleActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true" />
         <activity
             android:name=".PictureVideoPlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true"
             android:screenOrientation="sensor" />
         <activity
             android:name=".PictureExternalPreviewActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true" />
 
         <activity
             android:name=".PicturePlayAudioActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:multiprocess="true" />
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
+            android:multiprocess="true"
             android:theme="@style/Base.Theme.NoActionBar" />
         <activity
             android:name="com.yalantis.ucrop.PictureMultiCuttingActivity"
+            android:multiprocess="true"
             android:theme="@style/Base.Theme.NoActionBar" />
 
     </application>

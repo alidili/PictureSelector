@@ -56,6 +56,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author：luck
@@ -443,7 +445,6 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
 
     /**
      * 保存相片至本地相册
-     *
      */
     private void savePictureAlbum() {
         String suffix = PictureMimeType.getLastImgSuffix(mMimeType);
@@ -538,8 +539,8 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
                 String suffix = PictureMimeType.getLastImgSuffix(mMimeType);
                 String state = Environment.getExternalStorageState();
                 File rootDir = state.equals(Environment.MEDIA_MOUNTED)
-                                ? Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                                : getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                        ? Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                        : getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                 if (!rootDir.exists()) {
                     rootDir.mkdirs();
                 }
@@ -569,15 +570,27 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
         return null;
     }
 
+    private Timer mTimer;
+
     @Override
     public void onBackPressed() {
-        if (SdkVersionUtils.checkedAndroid_Q()) {
-            finishAfterTransition();
-        } else {
-            super.onBackPressed();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
         }
-        finish();
-        exitAnimation();
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (SdkVersionUtils.checkedAndroid_Q()) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
+                finish();
+                exitAnimation();
+            }
+        }, 500);
     }
 
     private void exitAnimation() {

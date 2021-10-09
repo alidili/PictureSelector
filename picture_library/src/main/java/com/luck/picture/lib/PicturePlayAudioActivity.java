@@ -13,6 +13,9 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * # No longer maintain audio related functions,
  * but can continue to use but there will be phone compatibility issues.
@@ -171,8 +174,8 @@ public class PicturePlayAudioActivity extends PictureBaseActivity implements Vie
             try {
                 mediaPlayer.stop();
                 mediaPlayer.reset();
-                if (PictureMimeType.isContent(path)){
-                    mediaPlayer.setDataSource(getContext(),Uri.parse(path));
+                if (PictureMimeType.isContent(path)) {
+                    mediaPlayer.setDataSource(getContext(), Uri.parse(path));
                 } else {
                     mediaPlayer.setDataSource(path);
                 }
@@ -201,14 +204,26 @@ public class PicturePlayAudioActivity extends PictureBaseActivity implements Vie
         }
     }
 
+    private Timer mTimer;
+
     @Override
     public void onBackPressed() {
-        if (SdkVersionUtils.checkedAndroid_Q()) {
-            finishAfterTransition();
-        } else {
-            super.onBackPressed();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
         }
-        exit();
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (SdkVersionUtils.checkedAndroid_Q()) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
+                exit();
+            }
+        }, 500);
     }
 
     @Override

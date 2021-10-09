@@ -44,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author：luck
@@ -612,7 +614,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
                     fileSize = PictureFileUtils.formatFileSize(media.getSize(), 2);
                     mCbOriginal.setText(getString(R.string.picture_original_image, fileSize));
                 } else {
-                     mCbOriginal.setText(getString(R.string.picture_default_original_image));
+                    mCbOriginal.setText(getString(R.string.picture_default_original_image));
                 }
             }
             if (config.checkNumMode) {
@@ -1164,13 +1166,23 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
         }
     }
 
+    private Timer mTimer;
 
     @Override
     public void onBackPressed() {
-        updateResult();
-        finish();
-        overridePendingTransition(0, PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation);
-
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                updateResult();
+                finish();
+                overridePendingTransition(0, PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation);
+            }
+        }, 500);
     }
 
     /**
