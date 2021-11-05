@@ -27,8 +27,6 @@ import com.luck.picture.lib.listener.OnPermissionDialogOptionCallback;
 import com.luck.picture.lib.permissions.PermissionChecker;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * @author：luck
@@ -188,24 +186,16 @@ public class PictureCustomCameraActivity extends PictureSelectorCameraEmptyActiv
         });
     }
 
-    private Timer mTimer;
+    private boolean mIsBackPressed;
 
     @Override
     public void onBackPressed() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
+        if (mIsBackPressed) return;
+        mIsBackPressed = true;
+        if (config != null && config.camera && PictureSelectionConfig.listener != null) {
+            PictureSelectionConfig.listener.onCancel();
         }
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (config != null && config.camera && PictureSelectionConfig.listener != null) {
-                    PictureSelectionConfig.listener.onCancel();
-                }
-                exit();
-            }
-        }, 500);
+        exit();
     }
 
     @Override

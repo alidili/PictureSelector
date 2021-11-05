@@ -134,7 +134,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         super.onResume();
         if (isEnterSetting) {
             if (PermissionChecker
-                            .checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    .checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 if (mAdapter.isDataEmpty()) {
                     readLocalMedia();
                 }
@@ -798,7 +798,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                         }
                         String firstCover = LocalMediaPageLoader
                                 .getInstance(getContext()).getFirstCover(mediaFolder.getBucketId());
-                        if (TextUtils.isEmpty(firstCover)){
+                        if (TextUtils.isEmpty(firstCover)) {
                             continue;
                         }
                         mediaFolder.setFirstImagePath(firstCover);
@@ -1492,7 +1492,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     mCbOriginal.setText(getString(R.string.picture_default_original_image));
                 }
             } else {
-                 mCbOriginal.setText(getString(R.string.picture_default_original_image));
+                mCbOriginal.setText(getString(R.string.picture_default_original_image));
             }
         }
     }
@@ -1816,7 +1816,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                         if (audioOutUri != null) {
                             InputStream inputStream = PictureContentResolver.getContentResolverOpenInputStream(this, Uri.parse(config.cameraPath));
                             OutputStream outputStream = PictureContentResolver.getContentResolverOpenOutputStream(this, audioOutUri);
-                            PictureFileUtils.writeFileFromIS(inputStream,outputStream);
+                            PictureFileUtils.writeFileFromIS(inputStream, outputStream);
                             config.cameraPath = audioOutUri.toString();
                         }
                     } catch (Exception e) {
@@ -1834,7 +1834,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 // content: Processing rules
                 String path = PictureFileUtils.getPath(getContext(), Uri.parse(config.cameraPath));
                 File cameraFile = new File(path);
-                mimeType = PictureMimeType.getImageMimeType(path,config.cameraMimeType);
+                mimeType = PictureMimeType.getImageMimeType(path, config.cameraMimeType);
                 media.setSize(cameraFile.length());
                 media.setFileName(cameraFile.getName());
                 if (PictureMimeType.isHasImage(mimeType)) {
@@ -1858,7 +1858,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 media.setAndroidQToPath(mediaPath);
             } else {
                 File cameraFile = new File(config.cameraPath);
-                mimeType = PictureMimeType.getImageMimeType(config.cameraPath,config.cameraMimeType);
+                mimeType = PictureMimeType.getImageMimeType(config.cameraPath, config.cameraMimeType);
                 media.setSize(cameraFile.length());
                 media.setFileName(cameraFile.getName());
                 if (PictureMimeType.isHasImage(mimeType)) {
@@ -2103,12 +2103,12 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(media.getPath())) {
                     media.setAndroidQToPath(cutPath);
                 }
-                media.setCropImageWidth(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH,0));
-                media.setCropImageHeight(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT,0));
-                media.setCropOffsetX(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_X,0));
-                media.setCropOffsetY(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_Y,0));
-                media.setCropResultAspectRatio(data.getFloatExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO,0F));
-                media.setEditorImage(data.getBooleanExtra(UCrop.EXTRA_EDITOR_IMAGE,false));
+                media.setCropImageWidth(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, 0));
+                media.setCropImageHeight(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT, 0));
+                media.setCropOffsetX(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_X, 0));
+                media.setCropOffsetY(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_Y, 0));
+                media.setCropResultAspectRatio(data.getFloatExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, 0F));
+                media.setEditorImage(data.getBooleanExtra(UCrop.EXTRA_EDITOR_IMAGE, false));
                 media.setCut(isCutPathEmpty);
                 result.add(media);
                 handlerResult(result);
@@ -2123,12 +2123,12 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(media.getPath())) {
                         media.setAndroidQToPath(cutPath);
                     }
-                    media.setCropImageWidth(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH,0));
-                    media.setCropImageHeight(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT,0));
-                    media.setCropOffsetX(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_X,0));
-                    media.setCropOffsetY(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_Y,0));
-                    media.setCropResultAspectRatio(data.getFloatExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO,0F));
-                    media.setEditorImage(data.getBooleanExtra(UCrop.EXTRA_EDITOR_IMAGE,false));
+                    media.setCropImageWidth(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, 0));
+                    media.setCropImageHeight(data.getIntExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT, 0));
+                    media.setCropOffsetX(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_X, 0));
+                    media.setCropOffsetY(data.getIntExtra(UCrop.EXTRA_OUTPUT_OFFSET_Y, 0));
+                    media.setCropResultAspectRatio(data.getFloatExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, 0F));
+                    media.setEditorImage(data.getBooleanExtra(UCrop.EXTRA_EDITOR_IMAGE, false));
                     media.setCut(isCutPathEmpty);
                     result.add(media);
                     handlerResult(result);
@@ -2319,29 +2319,21 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         }
     }
 
-    private Timer mTimer;
+    private boolean mIsBackPressed;
 
     @Override
     public void onBackPressed() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
+        if (mIsBackPressed) return;
+        mIsBackPressed = true;
+        if (SdkVersionUtils.checkedAndroid_Q()) {
+            finishAfterTransition();
+        } else {
+            finish();
         }
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (SdkVersionUtils.checkedAndroid_Q()) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                }
-                if (PictureSelectionConfig.listener != null) {
-                    PictureSelectionConfig.listener.onCancel();
-                }
-                exit();
-            }
-        }, 500);
+        if (PictureSelectionConfig.listener != null) {
+            PictureSelectionConfig.listener.onCancel();
+        }
+        exit();
     }
 
     @Override

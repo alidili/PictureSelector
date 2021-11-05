@@ -37,8 +37,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * @author：luck
@@ -410,25 +408,17 @@ public class PictureSelectorCameraEmptyActivity extends PictureBaseActivity {
         }
     }
 
-    private Timer mTimer;
+    private boolean mIsBackPressed;
 
     @Override
     public void onBackPressed() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
+        if (mIsBackPressed) return;
+        mIsBackPressed = true;
+        if (SdkVersionUtils.checkedAndroid_Q()) {
+            finishAfterTransition();
+        } else {
+            finish();
         }
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (SdkVersionUtils.checkedAndroid_Q()) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                }
-                exit();
-            }
-        }, 500);
+        exit();
     }
 }

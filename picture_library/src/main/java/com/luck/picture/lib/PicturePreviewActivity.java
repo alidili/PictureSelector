@@ -1166,23 +1166,15 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
         }
     }
 
-    private Timer mTimer;
+    private boolean mIsBackPressed;
 
     @Override
     public void onBackPressed() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-        }
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                updateResult();
-                finish();
-                overridePendingTransition(0, PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation);
-            }
-        }, 500);
+        if (mIsBackPressed) return;
+        mIsBackPressed = true;
+        updateResult();
+        finish();
+        overridePendingTransition(0, PictureSelectionConfig.windowAnimationStyle.activityPreviewExitAnimation);
     }
 
     /**

@@ -570,27 +570,19 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
         return null;
     }
 
-    private Timer mTimer;
+    private boolean mIsBackPressed;
 
     @Override
     public void onBackPressed() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
+        if (mIsBackPressed) return;
+        mIsBackPressed = true;
+        if (SdkVersionUtils.checkedAndroid_Q()) {
+            finishAfterTransition();
+        } else {
+            finish();
         }
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (SdkVersionUtils.checkedAndroid_Q()) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                }
-                finish();
-                exitAnimation();
-            }
-        }, 500);
+        finish();
+        exitAnimation();
     }
 
     private void exitAnimation() {
